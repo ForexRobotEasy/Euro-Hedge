@@ -1,0 +1,153 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                  Euro Hedge                      |
+//|                        Developer's Site: forexroboteasy.com      |
+//|                      Development: Forex Robot Easy Team          |
+//+------------------------------------------------------------------+
+#property version   '1.00'
+#property strict
+
+// Global variables
+double LotSize = 0.01;
+double HedgingDistance = 10;
+double AveragingDistance = 10;
+double PyramidingDistance = 10;
+double MartingaleMultiplier = 2;
+double AntiMartingaleMultiplier = 0.5;
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+    // Initialize necessary variables and settings
+
+    return(INIT_SUCCEEDED);
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+    // Clean up any resources or memory used
+}
+
+//+------------------------------------------------------------------+
+//| Expert start function                                            |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+    // Implement your trading strategy here
+
+    // Example trading functions
+    OpenHedgingPosition();
+    OpenAveragingPosition();
+    AddPyramidingPosition();
+    IncreaseLotSize();
+    DecreaseLotSize();
+
+    // Close all open positions
+    CloseAllPositions();
+}
+
+//+------------------------------------------------------------------+
+//| Open a new position in the opposite direction                     |
+//| to mitigate risks                                                 |
+//+------------------------------------------------------------------+
+void OpenHedgingPosition()
+{
+    // Implement hedging strategy here
+
+    // Example code
+    int ticket = OrderSend(Symbol(), OP_SELL, LotSize, Bid, 3, 0, 0, 'Hedging Position', 0, 0, clrRed);
+    if(ticket > 0)
+    {
+        // Hedging position opened successfully
+        // Add any necessary logic or actions
+    }
+}
+
+//+------------------------------------------------------------------+
+//| Average the entry price of a position by opening additional trades|
+//| in the same direction                                             |
+//+------------------------------------------------------------------+
+void OpenAveragingPosition()
+{
+    // Implement averaging strategy here
+
+    // Example code
+    int ticket = OrderSend(Symbol(), OP_SELL, LotSize, Bid, 3, 0, 0, 'Averaging Position', 0, 0, clrBlue);
+    if(ticket > 0)
+    {
+        // Averaging position opened successfully
+        // Add any necessary logic or actions
+    }
+}
+
+//+------------------------------------------------------------------+
+//| Add positions in the same direction as an existing position       |
+//| to maximize profits                                               |
+//+------------------------------------------------------------------+
+void AddPyramidingPosition()
+{
+    // Implement pyramiding strategy here
+
+    // Example code
+    int ticket = OrderSend(Symbol(), OP_SELL, LotSize, Bid, 3, 0, 0, 'Pyramiding Position', 0, 0, clrGreen);
+    if(ticket > 0)
+    {
+        // Pyramiding position opened successfully
+        // Add any necessary logic or actions
+    }
+}
+
+//+------------------------------------------------------------------+
+//| Increase the lot size of subsequent trades after a loss           |
+//| to recover losses quickly                                         |
+//+------------------------------------------------------------------+
+void IncreaseLotSize()
+{
+    // Implement lot martingale strategy here
+
+    // Example code
+    LotSize = LotSize * MartingaleMultiplier;
+
+    // Add any necessary logic or actions
+}
+
+//+------------------------------------------------------------------+
+//| Decrease the lot size of subsequent trades after a loss           |
+//| to minimize risks                                                 |
+//+------------------------------------------------------------------+
+void DecreaseLotSize()
+{
+    // Implement anti-martingale strategy here
+
+    // Example code
+    LotSize = LotSize * AntiMartingaleMultiplier;
+
+    // Add any necessary logic or actions
+}
+
+//+------------------------------------------------------------------+
+//| Close all open positions                                          |
+//+------------------------------------------------------------------+
+void CloseAllPositions()
+{
+    // Close all open positions
+
+    // Example code
+    int total = OrdersTotal();
+    for(int i = total - 1; i >= 0; i--)
+    {
+        if(OrderSelect(i, SELECT_BY_POS, MODE_TRADES))
+        {
+            if(OrderClose(OrderTicket(), OrderLots(), OrderClosePrice(), 3, clrBlack))
+            {
+                // Position closed successfully
+                // Add any necessary logic or actions
+            }
+        }
+    }
+}
